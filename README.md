@@ -18,6 +18,13 @@
 
 ---
 
+## 🎥 Demo
+
+![Prediction](./assets/demo1.png)
+![Recommendations](./assets/demo2.png)
+
+---
+
 ## ✨ Key Features
 
 ### ML Pipeline
