@@ -20,8 +20,8 @@
 
 ## 🎥 Demo
 
-![Prediction](./assets/demo1.png)
-![Recommendations](./assets/demo2.png)
+![Prediction](./assets/Demo1.png)
+![Recommendations](./assets/Demo2.png)
 
 ---
 
