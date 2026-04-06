@@ -1,8 +1,8 @@
 # StudyLens — ML-Powered Student Performance Prediction
+> Built as a real-world, production-style system combining ML, APIs, and frontend to deliver actionable insights.
+**Stack:** XGBoost • SHAP • Flask API • Chrome Extension • Feature Engineering Pipeline  
 
-**An end-to-end machine learning system that predicts student grades and provides personalized study recommendations using behavioral analytics.**
-
-![Demo](https://img.shields.io/badge/demo-live-brightgreen) ![Python](https://img.shields.io/badge/python-3.8+-blue) ![License](https://img.shields.io/badge/license-MIT-green)
+**An end-to-end ML system for predicting student performance and delivering actionable study recommendations using behavioral analytics.**
 
 ---
 
@@ -37,6 +37,15 @@
 - **Input validation** with detailed error messages
 - **CORS-enabled** for cross-origin requests
 - **Sub-10ms latency** (p95 < 20ms)
+
+---
+
+## ⚙️ Key Engineering Decisions
+
+- Chose **XGBoost over Random Forest** for better bias-variance tradeoff on tabular data  
+- Tuned classification threshold (0.44) to prioritize **recall over accuracy** for early-risk detection  
+- Precomputed SHAP explainers to reduce runtime overhead during inference  
+- Designed API with strict input validation to prevent invalid feature propagation  
 
 ---
 
@@ -90,6 +99,25 @@
 7. Dashboard updates with predictions + advice
 
 ---
+
+### Sample API Response
+
+```json
+{
+  "predicted_grade": 42.0,
+  "pass_probability": 0.021,
+  "risk_level": "HIGH",
+  "top_factors": [
+    "low focus ratio",
+    "high late-night study",
+    "low study hours"
+  ],
+  "recommendations": [
+    "Increase focused study sessions",
+    "Reduce late-night study habits",
+    "Practice more problems consistently"
+  ]
+}
 
 ## 🚀 Quick Start
 
@@ -266,5 +294,3 @@ python test_api.py
 - [ ] Deep learning for temporal patterns (LSTM on session history)
 
 ---
-
-**Built with:** Python • XGBoost • SHAP • Flask • JavaScript • Chrome Extensions API
