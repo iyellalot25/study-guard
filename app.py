@@ -274,9 +274,17 @@ def generate_recommendations(student_features, shap_values_reg,
 
     triggered.sort(key=lambda x: x['priority'], reverse=True)
 
-    risk = ('HIGH RISK'      if pass_probability < threshold
-            else 'MODERATE RISK' if pass_probability < threshold + 0.15
-            else 'ON TRACK')
+    # Risk calculation: prioritize predicted grade, then probability
+    # This makes risk labels more intuitive for students
+    if predicted_grade < 60:
+        risk = 'HIGH RISK'           # Actually failing (grade < 60)
+    elif pass_probability < threshold:
+        risk = 'MODERATE RISK'       # Passing but model is uncertain
+    elif pass_probability < threshold + 0.15:
+        risk = 'MODERATE RISK'       # Passing but could improve
+    else:
+        risk = 'ON TRACK'            # Confidently passing
+
 
     return {
         'predicted_grade':  round(float(predicted_grade), 1),
