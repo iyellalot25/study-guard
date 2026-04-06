@@ -125,13 +125,6 @@
     "Practice more problems consistently"
   ]
 }
-
-## 🚀 Quick Start
-
-### Prerequisites
-```bash
-Python 3.8+
-Chrome browser
 ```
 
 ### Installation
