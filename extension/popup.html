@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudyLens</title>
+  <style>
+    /* Reset & Base */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 360px;
+      min-height: 480px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f1117;
+      color: #e8eaf0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #1a1d2e 0%, #16213e 100%);
+      padding: 16px 20px 14px;
+      border-bottom: 1px solid #1e2235;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-logo { font-size: 22px; }
+    .header-title { font-size: 16px; font-weight: 700; color: #7c9ef5; }
+    .header-sub { font-size: 11px; color: #6b7280; margin-top: 1px; }
+
+    /* Status banner */
+    .status-banner {
+      padding: 8px 20px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-banner.ok      { background: #0d1f12; color: #4ade80; border-bottom: 1px solid #14532d; }
+    .status-banner.warn    { background: #1c1207; color: #fbbf24; border-bottom: 1px solid #92400e; }
+    .status-banner.error   { background: #1c0a0a; color: #f87171; border-bottom: 1px solid #7f1d1d; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+
+    /* Sections */
+    .section { padding: 14px 20px; border-bottom: 1px solid #1e2235; }
+    .section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+
+    /* Grade card */
+    .grade-row { display: flex; align-items: center; gap: 16px; }
+    .grade-circle {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      border: 3px solid #374151;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: border-color 0.3s;
+    }
+    .grade-circle.on-track   { border-color: #4ade80; }
+    .grade-circle.moderate   { border-color: #fbbf24; }
+    .grade-circle.high-risk  { border-color: #f87171; }
+    .grade-number { font-size: 22px; font-weight: 800; }
+    .grade-label  { font-size: 9px; color: #9ca3af; margin-top: -2px; }
+
+    .grade-details { flex: 1; }
+    .grade-pass-prob {
+      font-size: 13px; font-weight: 600; color: #e8eaf0;
+      margin-bottom: 4px;
+    }
+    .risk-badge {
+      display: inline-block;
+      font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 99px;
+      letter-spacing: 0.05em;
+    }
+    .risk-badge.on-track  { background: #14532d; color: #4ade80; }
+    .risk-badge.moderate  { background: #78350f; color: #fbbf24; }
+    .risk-badge.high-risk { background: #7f1d1d; color: #f87171; }
+
+    .updated-at { font-size: 10px; color: #4b5563; margin-top: 6px; }
+
+    /* Feature bars */
+    .feature-list { display: flex; flex-direction: column; gap: 7px; }
+    .feature-row  { display: flex; align-items: center; gap: 8px; }
+    .feature-icon { font-size: 13px; width: 20px; text-align: center; flex-shrink: 0; }
+    .feature-name { font-size: 11px; color: #9ca3af; width: 130px; flex-shrink: 0; }
+    .feature-bar-wrap {
+      flex: 1; height: 5px; background: #1e2235; border-radius: 99px; overflow: hidden;
+    }
+    .feature-bar {
+      height: 100%; border-radius: 99px;
+      background: #7c9ef5;
+      transition: width 0.4s ease;
+    }
+    .feature-bar.low    { background: #f87171; }
+    .feature-bar.medium { background: #fbbf24; }
+    .feature-bar.high   { background: #4ade80; }
+    .feature-val { font-size: 11px; color: #6b7280; width: 36px; text-align: right; flex-shrink: 0; }
+
+    /* Recommendations */
+    .rec-list { display: flex; flex-direction: column; gap: 8px; }
+    .rec-item {
+      background: #1a1d2e;
+      border: 1px solid #1e2235;
+      border-left: 3px solid #7c9ef5;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 12px;
+      color: #c9d1e8;
+      line-height: 1.4;
+    }
+    .rec-item.high-impact  { border-left-color: #f87171; }
+    .rec-item.med-impact   { border-left-color: #fbbf24; }
+    .rec-priority {
+      font-size: 10px; color: #4b5563; margin-top: 4px; font-style: italic;
+    }
+
+    .no-recs {
+      text-align: center; color: #4ade80;
+      font-size: 13px; padding: 8px 0;
+    }
+
+    /* Manual input */
+    .input-row {
+      display: flex; gap: 8px; align-items: center; margin-top: 6px;
+    }
+    .input-label { font-size: 11px; color: #9ca3af; flex: 1; }
+    .input-num {
+      width: 60px; padding: 4px 8px;
+      background: #1a1d2e; border: 1px solid #374151;
+      border-radius: 6px; color: #e8eaf0; font-size: 12px;
+      text-align: right;
+    }
+    .btn-sm {
+      padding: 4px 10px; border-radius: 6px; border: none;
+      cursor: pointer; font-size: 11px; font-weight: 600;
+      background: #1e3a5f; color: #7c9ef5;
+      transition: background 0.2s;
+    }
+    .btn-sm:hover { background: #2a4a7f; }
+
+    /* Footer buttons */
+    .footer {
+      padding: 12px 20px;
+      display: flex; gap: 8px; justify-content: flex-end;
+    }
+    .btn-refresh {
+      padding: 6px 14px; border-radius: 8px; border: none;
+      background: #1e3a5f; color: #7c9ef5;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-refresh:hover { background: #2a4a7f; }
+    .btn-reset {
+      padding: 6px 14px; border-radius: 8px; border: none;
+      background: #1f1215; color: #9ca3af;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .btn-reset:hover { color: #f87171; }
+
+    /* Loading */
+    .loading {
+      text-align: center; padding: 40px 20px;
+      color: #4b5563; font-size: 13px;
+    }
+    .spinner {
+      width: 28px; height: 28px;
+      border: 3px solid #1e2235;
+      border-top-color: #7c9ef5;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-logo">🔬</div>
+    <div>
+      <div class="header-title">StudyLens</div>
+      <div class="header-sub">ML-powered study performance tracker</div>
+    </div>
+  </div>
+
+  <!-- API Status Banner -->
+  <div class="status-banner" id="statusBanner">
+    <div class="status-dot"></div>
+    <span id="statusText">Checking API...</span>
+  </div>
+
+  <!-- Loading spinner (shown until data arrives) -->
+  <div class="loading" id="loadingView">
+    <div class="spinner"></div>
+    <div>Loading your study data...</div>
+  </div>
+
+  <!-- Main content (hidden until loaded) -->
+  <div id="mainContent" style="display:none">
+
+    <!-- Grade Prediction -->
+    <div class="section">
+      <div class="section-title">This Week's Prediction</div>
+      <div class="grade-row">
+        <div class="grade-circle" id="gradeCircle">
+          <div class="grade-number" id="gradeNumber">--</div>
+          <div class="grade-label">/ 100</div>
+        </div>
+        <div class="grade-details">
+          <div class="grade-pass-prob" id="passProbText">Pass probability: --%</div>
+          <div><span class="risk-badge" id="riskBadge">--</span></div>
+          <div class="updated-at" id="updatedAt">Not yet updated</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Study Signals -->
+    <div class="section">
+      <div class="section-title">Your Study Signals (This Week)</div>
+      <div class="feature-list" id="featureList">
+        <!-- Populated by popup.js -->
+      </div>
+    </div>
+
+    <!-- Recommendations -->
+    <div class="section">
+      <div class="section-title">Recommendations</div>
+      <div class="rec-list" id="recList">
+        <!-- Populated by popup.js -->
+      </div>
+    </div>
+
+    <!-- Manual Inputs -->
+    <div class="section">
+      <div class="section-title">Log Activity (Weekly Estimates)</div>
+
+      <div class="input-row">
+        <span class="input-label">✏️ Practice problems completed this week</span>
+        <input type="number" class="input-num" id="practiceInput"
+               min="0" max="200" placeholder="0" />
+        <button class="btn-sm" id="practiceBtn">Set</button>
+      </div>
+
+      <div class="input-row" style="margin-top:8px">
+        <span class="input-label">💬 Forum posts written this week</span>
+        <input type="number" class="input-num" id="forumInput"
+               min="0" max="50" placeholder="0" />
+        <button class="btn-sm" id="forumBtn">Set</button>
+      </div>
+
+      <div class="input-row" style="margin-top:8px">
+        <span class="input-label">📅 Days before deadline you typically start</span>
+        <input type="number" class="input-num" id="deadlineInput"
+               min="0" max="30" placeholder="5" />
+        <button class="btn-sm" id="deadlineBtn">Set</button>
+      </div>
+
+      <div class="input-row" style="margin-top:8px">
+        <span class="input-label">🎥 Video completion rate (0-100%)</span>
+        <input type="number" class="input-num" id="videoInput"
+               min="0" max="100" placeholder="50" />
+        <button class="btn-sm" id="videoBtn">Set</button>
+      </div>
+    </div>
+
+  </div><!-- end mainContent -->
+
+  <!-- Footer -->
+  <div class="footer">
+    <button class="btn-reset" id="resetBtn">Reset Data</button>
+    <button class="btn-refresh" id="refreshBtn">↻ Refresh</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
