@@ -278,7 +278,7 @@ python test_api.py
 
 ## 🔮 Future Enhancements
 
-### Short-term (Phase 9)
+### Short-term
 - [ ] LMS Integration (Canvas API) for automatic deadline tracking
 - [ ] Site-specific practice problem detection (LeetCode, HackerRank)
 - [ ] A/B test threshold values per course difficulty
@@ -292,5 +292,13 @@ python test_api.py
 - [ ] Real student data (IRB approval required)
 - [ ] Causal inference (what happens if student follows advice?)
 - [ ] Deep learning for temporal patterns (LSTM on session history)
+
+---
+
+## 👨‍💻 Author
+
+**Srijan Ghosh**
+
+Aspiring Software Engineer focused on building production-ready full-stack applications with modern web technologies and AI-powered user experiences.
 
 ---
